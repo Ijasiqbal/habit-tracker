@@ -37,15 +37,17 @@ class HabitViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-    @action(detail=True, methods=['post'], url_path='complete')
-    def complete(self, request, pk=None):
+    @action(detail=True, methods=['post'], url_path='toggle')
+    def toggle(self, request, pk=None):
         habit = self.get_object()
         completion_date = request.data.get('date', str(date.today()))
-        obj, created = HabitCompletion.objects.get_or_create(habit=habit, date=completion_date)
-        if created:
-            return Response({'status': 'completed', 'date': completion_date})
+        obj = HabitCompletion.objects.filter(habit=habit, date=completion_date).first()
+        if obj:
+            obj.delete()
+            return Response({'status': 'unmarked', 'date': completion_date})
         else:
-            return Response({'status': 'already completed', 'date': completion_date}, status=status.HTTP_200_OK)
+            HabitCompletion.objects.create(habit=habit, date=completion_date)
+            return Response({'status': 'completed', 'date': completion_date})
 
     @action(detail=False, methods=['get'], url_path='statistics')
     def statistics(self, request):

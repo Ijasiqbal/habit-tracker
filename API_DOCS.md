@@ -1,8 +1,8 @@
 # Habit Tracker API Documentation
 
-**Local Server Endpoint:**
+**Production Server Endpoint:**
 ```
-http://127.0.0.1:8000
+https://habit-tracker-879q.onrender.com
 ```
 
 All API endpoints below are relative to this base URL.
@@ -133,8 +133,8 @@ All API endpoints below are relative to this base URL.
 
 ---
 
-### Mark a Habit as Completed for a Date
-- **URL:** `/api/habits/{id}/complete/`
+### Toggle Habit Completion for a Date
+- **URL:** `/api/habits/{id}/toggle/`
 - **Method:** `POST`
 - **Headers:** `Authorization: Bearer <access_token>`
 - **Body:** (optional, defaults to today)
@@ -153,7 +153,7 @@ All API endpoints below are relative to this base URL.
   or
   ```json
   {
-    "status": "already completed",
+    "status": "unmarked",
     "date": "2024-07-16"
   }
   ```
